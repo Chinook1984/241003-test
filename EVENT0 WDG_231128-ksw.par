@@ -1,0 +1,85 @@
+# Indigo4L
+# SC1721
+						
+	#######################################################################################################################					
+	### Safety IC 적용 AD BOARD 기본 Setting F/W (DISP PIN 할당 및 설정) ###					
+	### LEE Sang Yeong ###					
+	#######################################################################################################################					
+	### Application : Developer Studio Next - v1.1.2.1					
+	### Date        : 2023/08/22					
+	### Time        : 12:56 PM					
+						
+	w32		0x000A0008	0x01020008		#path:INDIGO4L.RLT_0.TMCSR#
+						
+	w32		0x000000A0	0x00000001		#path:INDIGO4L.GC.SYSWD_RES.WDG_RESET#
+	w32		0x000000C0	0x00000001		#path:INDIGO4L.GC.OSCWD_RES.WDG_RESET#
+	i4wdr					# COMMAND Sequencer Watchdog 카운트 리셋 #
+						
+	############################################################################################################################					
+	###################################################### WDG ICON  #########################################################					
+						
+	r32		0x60000364			
+	i4drload		0x00000008			
+	i4jumprdr1greater0	5				
+	w32		0x60000368	0x22222222		
+	i4jumpr	4				
+	w32		0x60000368	0x11111111		
+						
+						
+	r32		0x60000364			
+	i4drload		0x0000000F			
+	i4jumprdr1greater0	2				
+	i4jumpr	5				
+	w32		0x60000364	0x00000000		
+	i4jumpr	5				
+	i4dradd		0x00000001			
+	i4drput	32	0x60000364			
+						
+	############################################################################################################################					
+	###################################################### FREEZE CHECK  #########################################################					
+						
+	i4drget	32	0x60000310			# 이전 저장된 RED CRC 값 Read  #
+	i4drget	32	0x0004E454			#path:SEERISMVL.SIG0.CRC_R_Window7#
+	i4drput	32	0x60000310			
+	jmpnamed	==	0	#name:freeze_SAME#		
+	i4bufclr	6				
+	jmpnamed	always	0	#name:freeze_OK#		
+	lblnamed 			#name:freeze_SAME#		
+	i4bufinc	6				
+	i4bufcheck	6	0x00000032			
+	jmpnamed	always	0	#name:freeze_END#		
+	w32		0x60000318	0x33333333		
+	w32		0x60000314	0x00000000		
+	i4drload		0x00000031			
+	i4drsave	6				
+	jmpnamed	always	0	#name:freeze_END#		
+	lblnamed 			#name:freeze_OK#		
+	w32		0x60000318	0x22222222		
+	lblnamed 			#name:freeze_END#		
+						
+	i4bufcheck	6	0x00000031			
+	i4jumpr	2				
+	jmpnamed	always	0	#name:freeze_END2#		
+	r32		0x60000314			
+	i4drload		0x00000006			
+	i4jumprdr1greater0	5				
+	w32		0x60000318	0x22222222		
+	i4jumpr	4				
+	w32		0x60000318	0x11111111		
+						
+	r32		0x60000314			
+	i4drload		0x0000000C			
+	i4jumprdr1greater0	2				
+	i4jumpr	5				
+	w32		0x60000314	0x00000000		
+	i4jumpr	5				
+	i4dradd		0x00000001			
+	i4drput	32	0x60000314			
+	lblnamed 			#name:freeze_END2#		
+						
+	############################################################################################################################					
+	############################################################################################################################					
+						
+	w32		0x000A0008	0x01040008		#path:INDIGO4L.RLT_0.TMCSR#
+						
+	i4end					
