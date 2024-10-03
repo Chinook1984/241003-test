@@ -1,0 +1,325 @@
+# Indigo4L
+# SC1721
+
+	#######################################################################################################################					
+	### Safety IC 적용 AD BOARD 기본 Setting F/W (DISP PIN 할당 및 설정) ###					
+	### LEE Sang Yeong ###					
+	#######################################################################################################################					
+	### Application : Developer Studio Next - v1.1.2.1					
+	### Date        : 2023/08/22					
+	### Time        : 12:56 PM					
+						
+						
+	w32		0x000A1808	0x01020008		#path:INDIGO4L.RLT_3.TMCSR#
+						
+						
+	r32		0x600003D8			
+	i4drcheck		0x55550000			#
+	jmpnamed	always	0	#name:NEXT#	# if DREG0 != 0x55550000, execute 
+	r32		0x600003DC					# if DREG0 == 0x55550000, execute 	
+	i4drcheck		0x11111111			
+	jmpnamed	always	0	#name:NEXT#		
+	w32		0x600003DC	0x00000000		
+#	w32		0x600003E0	0x00000000		
+	wf32		0x00000414	31 1 1		# SWRESET#
+						
+	lblnamed 			#name:NEXT#		
+						
+	r32		0x600003D8			
+	i4drcheck		0xFFFF0000			
+	jmpnamed	always	0	#name:SWRST CHECK_END#		
+						
+	##################################################### 비상 점명등 #######################################################					
+						
+	r32		0x600002F0			
+	i4drcheck		0x00000000			# 	
+	i4jumpr	19							# if DREG0 != 0x00, execute 
+	r32		0x600002C4					# if DREG0 == 0x00, execute 
+	i4drcheck		0x11111111			# if 
+	i4jumpr	8							# if DREG0 
+	w32		0x600002C4	0x22222222		
+	w32		0x600002C8	0x22222222		
+	i4jumpr	7				
+	w32		0x600002C4	0x11111111		
+	w32		0x600002C8	0x11111111		
+	r32		0x600002F0			
+	i4drcheck		0x00000000			
+	i4jumpr	5				
+	w32		0x600002F0	0x0000000A		
+	i4jumpr	7				
+	r32		0x600002F0			
+	i4dradd		0xFFFFFFFF			
+	i4drput	32	0x600002F0			
+						
+	##################################################### Safety MODE #######################################################					
+						
+	r32		0x600002D0			
+	i4drcheck		0x00000000			
+	i4jumpr	13				
+	r32		0x60000294			
+	i4drcheck		0x11111111			
+	i4jumpr	5				
+	w32		0x60000294	0x22222222		
+	i4jumpr	4				
+	w32		0x60000294	0x11111111		
+	r32		0x600002D0			
+	i4drcheck		0x00000000			
+	i4jumpr	5				
+	w32		0x600002D0	0x0000000A		
+	i4jumpr	7				
+	r32		0x600002D0			
+	i4dradd		0xFFFFFFFF			
+	i4drput	32	0x600002D0			
+						
+	##################################################### LOAD 1 #######################################################					
+						
+	r32		0x600002D4			
+	i4drcheck		0x00000000			
+	i4jumpr	13				
+	r32		0x60000298			
+	i4drcheck		0x11111111			
+	i4jumpr	5				
+	w32		0x60000298	0x22222222		
+	i4jumpr	4				
+	w32		0x60000298	0x11111111		
+	r32		0x600002D4			
+	i4drcheck		0x00000000			
+	i4jumpr	5				
+	w32		0x600002D4	0x00000005		
+	i4jumpr	7				
+	r32		0x600002D4			
+	i4dradd		0xFFFFFFFF			
+	i4drput	32	0x600002D4			
+						
+	##################################################### LOAD 2 #######################################################					
+						
+	r32		0x600002D8			
+	i4drcheck		0x00000002			
+	i4jumpr	13				
+	r32		0x6000029C			
+	i4drcheck		0x11111111			
+	i4jumpr	5				
+	w32		0x6000029C	0x22222222		
+	i4jumpr	4				
+	w32		0x6000029C	0x11111111		
+	r32		0x600002D8			
+	i4drcheck		0x00000000			
+	i4jumpr	5				
+	w32		0x600002D8	0x00000005		
+	i4jumpr	7				
+	r32		0x600002D8			
+	i4dradd		0xFFFFFFFF			
+	i4drput	32	0x600002D8			
+						
+						
+	##################################################### LOAD 3 #######################################################					
+						
+	r32		0x600002DC			
+	i4drcheck		0x00000004			
+	i4jumpr	13				
+	r32		0x600002A0			
+	i4drcheck		0x11111111			
+	i4jumpr	5				
+	w32		0x600002A0	0x22222222		
+	i4jumpr	4				
+	w32		0x600002A0	0x11111111		
+	r32		0x600002DC			
+	i4drcheck		0x00000000			
+	i4jumpr	5				
+	w32		0x600002DC	0x00000005		
+	i4jumpr	7				
+	r32		0x600002DC			
+	i4dradd		0xFFFFFFFF			
+	i4drput	32	0x600002DC			
+						
+	##################################################### 속도 디스플레이  #######################################################					
+						
+	r32		0x600002E0			
+	i4drcheck		0x00000005			
+	i4jumpr	4				
+	w32		0x0004A9A0	0x601D8000		#5#
+						
+	r32		0x600002E0			
+	i4drcheck		0x00000006			
+	i4jumpr	4				
+	w32		0x0004A9A0	0x601DE000		#6#
+						
+	r32		0x600002E0			
+	i4drcheck		0x00000007			
+	i4jumpr	4				
+	w32		0x0004A9A0	0x601E4000		#7#
+						
+	r32		0x600002E0			
+	i4drcheck		0x00000008			
+	i4jumpr	4				
+	w32		0x0004A9A0	0x601EA000		#8#
+						
+	r32		0x600002E0			
+	i4drcheck		0x00000009			
+	i4jumpr	4				
+	w32		0x0004A9A0	0x601F0000		#9#
+						
+						
+						
+						
+	r32		0x600002E4			
+	i4drcheck		0x00000000			
+	i4jumpr	4				
+	w32		0x0004A9D8	0x601BA000		#0#
+						
+	r32		0x600002E4			
+	i4drcheck		0x00000002			
+	i4jumpr	4				
+	w32		0x0004A9D8	0x601C0000		#1#
+						
+	r32		0x600002E4			
+	i4drcheck		0x00000004			
+	i4jumpr	4				
+	w32		0x0004A9D8	0x601C6000		#2#
+						
+	r32		0x600002E4			
+	i4drcheck		0x00000006			
+	i4jumpr	4				
+	w32		0x0004A9D8	0x601CC000		#3#
+						
+	r32		0x600002E4			
+	i4drcheck		0x00000008			
+	i4jumpr	4				
+	w32		0x0004A9D8	0x601D2000		#4#
+						
+	r32		0x600002E4			
+	i4drcheck		0x0000000A			
+	i4jumpr	4				
+	w32		0x0004A9D8	0x601D8000		#5#
+						
+	r32		0x600002E4			
+	i4drcheck		0x0000000C			
+	i4jumpr	4				
+	w32		0x0004A9D8	0x601DE000		#6#
+						
+	r32		0x600002E4			
+	i4drcheck		0x0000000E			
+	i4jumpr	4				
+	w32		0x0004A9D8	0x601E4000		#7#
+						
+	r32		0x600002E4			
+	i4drcheck		0x00000010			
+	i4jumpr	4				
+	w32		0x0004A9D8	0x601EA000		#8#
+						
+	r32		0x600002E4			
+	i4drcheck		0x000000012			
+	i4jumpr	4				
+	w32		0x0004A9D8	0x601F0000		#9#
+						
+	##################################################### 속도 Count  #######################################################					
+						
+	r32		0x600002E4			
+	i4drcheck		0x00000013			
+	i4jumpr	11				
+	r32		0x600002E0			
+	i4dradd		0x00000001			
+	i4drput	32	0x600002E0			
+	w32		0x600002E4	0x00000000		
+	i4jumpr	7				
+	r32		0x600002E4			
+	i4dradd		0x00000001			
+	i4drput	32	0x600002E4			
+						
+	r32		0x600002E0			
+	i4drcheck		0x00000009			
+	i4jumpr	4				
+	w32		0x600002E0	0x00000005		
+						
+	##################################################### RPM 디스플레이  #######################################################					
+						
+	r32		0x600002E8			
+	i4drcheck		0x00000001			
+	i4jumpr	4				
+	w32		0x0004AA10	0x601C0000		#1#
+						
+	r32		0x600002E8			
+	i4drcheck		0x00000003			
+	i4jumpr	4				
+	w32		0x0004AA10	0x601C6000		#2#
+						
+						
+						
+						
+						
+	r32		0x600002EC			
+	i4drcheck		0x00000000			
+	i4jumpr	4				
+	w32		0x0004AA48	0x601BA000		#0#
+						
+	r32		0x600002EC			
+	i4drcheck		0x00000010			
+	i4jumpr	4				
+	w32		0x0004AA48	0x601C0000		#1#
+						
+	r32		0x600002EC			
+	i4drcheck		0x00000020			
+	i4jumpr	4				
+	w32		0x0004AA48	0x601C6000		#2#
+						
+	r32		0x600002EC			
+	i4drcheck		0x00000030			
+	i4jumpr	4				
+	w32		0x0004AA48	0x601CC000		#3#
+						
+	r32		0x600002EC			
+	i4drcheck		0x00000040			
+	i4jumpr	4				
+	w32		0x0004AA48	0x601D2000		#4#
+						
+	r32		0x600002EC			
+	i4drcheck		0x00000050			
+	i4jumpr	4				
+	w32		0x0004AA48	0x601D8000		#5#
+						
+	r32		0x600002EC			
+	i4drcheck		0x00000060			
+	i4jumpr	4				
+	w32		0x0004AA48	0x601DE000		#6#
+						
+	r32		0x600002EC			
+	i4drcheck		0x00000070			
+	i4jumpr	4				
+	w32		0x0004AA48	0x601E4000		#7#
+						
+	r32		0x600002EC			
+	i4drcheck		0x00000080			
+	i4jumpr	4				
+	w32		0x0004AA48	0x601EA000		#8#
+						
+	r32		0x600002EC			
+	i4drcheck		0x000000090			
+	i4jumpr	4				
+	w32		0x0004AA48	0x601F0000		#9#
+						
+	##################################################### 속도 Count  #######################################################					
+						
+	r32		0x600002EC			
+	i4drcheck		0x0000009F			
+	i4jumpr	11				
+	r32		0x600002E8			
+	i4dradd		0x00000001			
+	i4drput	32	0x600002E8			
+	w32		0x600002EC	0x00000000		
+	i4jumpr	7				
+	r32		0x600002EC			
+	i4dradd		0x00000001			
+	i4drput	32	0x600002EC			
+						
+	r32		0x600002E8			
+	i4drcheck		0x00000004			
+	i4jumpr	4				
+	w32		0x600002E8	0x00000005		
+						
+						
+	lblnamed 			#name:SWRST CHECK_END#		
+						
+	w32		0x000A1808	0x01040008		#path:INDIGO4L.RLT_3.TMCSR#
+						
+						
+	i4end					
